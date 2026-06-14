@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+@font-face { font-family:'PP Neue Montreal'; src:url('assets/fonts/ppneuemontreal-thin.otf') format('opentype'); font-weight:100; font-style:normal; font-display:swap; }
+@font-face { font-family:'PP Neue Montreal'; src:url('assets/fonts/ppneuemontreal-book.otf') format('opentype'); font-weight:400; font-style:normal; font-display:swap; }
+@font-face { font-family:'PP Neue Montreal'; src:url('assets/fonts/ppneuemontreal-italic.otf') format('opentype'); font-weight:400; font-style:italic; font-display:swap; }
+@font-face { font-family:'PP Neue Montreal'; src:url('assets/fonts/ppneuemontreal-medium.otf') format('opentype'); font-weight:500; font-style:normal; font-display:swap; }
+@font-face { font-family:'PP Neue Montreal'; src:url('assets/fonts/ppneuemontreal-bold.otf') format('opentype'); font-weight:700; font-style:normal; font-display:swap; }
+* { box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body { margin:0; background:#FBFAFE; -webkit-font-smoothing:antialiased; }
+::selection { background:rgba(172,87,209,.25); color:#1C1330; }
+@keyframes auroraA { 0%,100%{ transform:translate(0,0) scale(1);} 50%{ transform:translate(7%,-5%) scale(1.18);} }
+@keyframes auroraB { 0%,100%{ transform:translate(0,0) scale(1.1);} 50%{ transform:translate(-9%,7%) scale(.95);} }
+@keyframes auroraC { 0%,100%{ transform:translate(0,0) scale(1);} 50%{ transform:translate(6%,8%) scale(1.2);} }
+@keyframes spinSlow { to { transform:rotate(360deg);} }
+@keyframes spinRev { to { transform:rotate(-360deg);} }
+@keyframes floatA { 0%,100%{ transform:translateY(0);} 50%{ transform:translateY(-22px);} }
+@keyframes floatB { 0%,100%{ transform:translateY(0);} 50%{ transform:translateY(18px);} }
+@keyframes dropGlow { 0%,100%{ filter:drop-shadow(0 8px 34px rgba(172,87,209,.34)) drop-shadow(0 0 64px rgba(6,148,148,.14)); } 50%{ filter:drop-shadow(0 12px 50px rgba(172,87,209,.5)) drop-shadow(0 0 90px rgba(6,148,148,.24)); } }
+@keyframes shimmer { to { background-position:200% center; } }
+@keyframes gradShift { to { background-position:200% center; } }
+@keyframes marquee { to { transform:translateX(-50%); } }
+@keyframes pulseRing { 0%{ transform:scale(.75); opacity:.5;} 100%{ transform:scale(1.5); opacity:0;} }
+@keyframes drip { 0%{ transform:translateY(-6px) scale(.8); opacity:0;} 14%{ opacity:1;} 78%{ opacity:1;} 100%{ transform:translateY(120px) scale(1); opacity:0;} }
+@keyframes blink { 0%,100%{ opacity:1;} 50%{ opacity:.25;} }
+@keyframes scrollCue { 0%{ transform:translateY(0); opacity:0;} 35%{ opacity:1;} 70%{ opacity:1;} 100%{ transform:translateY(13px); opacity:0;} }
+@keyframes sweep { 0%{ transform:translateX(-120%);} 100%{ transform:translateX(120%);} }
+@media (prefers-reduced-motion: reduce){ *{ animation-duration:.001ms !important; animation-iteration-count:1 !important; } }
+</style>
+<script src="./image-slot.js"></script>
+</helmet>
+
+<div ref="{{ rootRef }}" style="position:relative; width:100%; min-height:100vh; background:linear-gradient(180deg,#FBFAFE 0%, #F3F0FA 100%); color:#1C1330; font-family:'Inter',sans-serif; overflow-x:clip;">
+
+  <!-- ============ AURORA BACKGROUND (light) ============ -->
+  <div aria-hidden="true" style="position:fixed; inset:0; z-index:0; overflow:hidden; pointer-events:none;">
+    <div style="position:absolute; width:62vw; height:62vw; top:-20%; left:-12%; border-radius:50%; background:radial-gradient(circle at 50% 50%, rgba(172,87,209,.18), transparent 64%); filter:blur(20px); animation:auroraA 24s ease-in-out infinite;"></div>
+    <div style="position:absolute; width:60vw; height:60vw; bottom:-24%; right:-14%; border-radius:50%; background:radial-gradient(circle at 50% 50%, rgba(6,148,148,.15), transparent 66%); filter:blur(20px); animation:auroraB 28s ease-in-out infinite;"></div>
+    <div style="position:absolute; width:46vw; height:46vw; top:30%; left:42%; border-radius:50%; background:radial-gradient(circle at 50% 50%, rgba(218,121,140,.13), transparent 68%); filter:blur(30px); animation:auroraC 32s ease-in-out infinite;"></div>
+    <div style="position:absolute; inset:0; background:radial-gradient(120% 80% at 50% -10%, rgba(173,139,247,.12), transparent 55%);"></div>
+  </div>
+
+  <!-- ============ TRAVELLING PILLS (fixed, scroll-driven) ============ -->
+  <div data-travel-layer aria-hidden="true" style="position:fixed; inset:0; z-index:40; pointer-events:none;">
+    <div data-travel-pill data-rot="-16" data-sx="-18" data-sy="-2" style="position:absolute; top:0; left:0; opacity:0; will-change:transform,opacity;">
+      <div style="position:relative; width:44px; height:116px; border-radius:22px; background:linear-gradient(170deg,#C2A6FB,#9166E4); box-shadow:0 16px 34px -10px rgba(172,87,209,.5), inset 0 2px 6px rgba(255,255,255,.6), inset 0 -10px 16px rgba(0,0,0,.16);"><div style="position:absolute; top:7px; left:9px; width:11px; height:62px; border-radius:8px; background:linear-gradient(rgba(255,255,255,.85), rgba(255,255,255,0)); filter:blur(.5px);"></div></div>
+    </div>
+    <div data-travel-pill data-rot="12" data-sx="16" data-sy="2" style="position:absolute; top:0; left:0; opacity:0; will-change:transform,opacity;">
+      <div style="position:relative; width:42px; height:108px; border-radius:21px; background:linear-gradient(170deg,#C66FE6,#9B3FD0); box-shadow:0 16px 34px -10px rgba(157,78,221,.5), inset 0 2px 6px rgba(255,255,255,.55), inset 0 -10px 16px rgba(0,0,0,.18);"><div style="position:absolute; top:7px; left:8px; width:10px; height:58px; border-radius:8px; background:linear-gradient(rgba(255,255,255,.8), rgba(255,255,255,0)); filter:blur(.5px);"></div></div>
+    </div>
+    <div data-travel-pill data-rot="-8" data-sx="0" data-sy="10" style="position:absolute; top:0; left:0; opacity:0; will-change:transform,opacity;">
+      <div style="position:relative; width:40px; height:104px; border-radius:20px; background:linear-gradient(170deg,#2BC4C4,#067E7E); box-shadow:0 16px 34px -10px rgba(6,148,148,.5), inset 0 2px 6px rgba(255,255,255,.5), inset 0 -10px 16px rgba(0,0,0,.18);"><div style="position:absolute; top:7px; left:7px; width:9px; height:54px; border-radius:8px; background:linear-gradient(rgba(255,255,255,.75), rgba(255,255,255,0)); filter:blur(.5px);"></div></div>
+    </div>
+    <div data-travel-pill data-rot="18" data-sx="-20" data-sy="14" style="position:absolute; top:0; left:0; opacity:0; will-change:transform,opacity;">
+      <div style="position:relative; width:38px; height:96px; border-radius:19px; background:linear-gradient(170deg,#ECA0AF,#D06478); box-shadow:0 16px 34px -10px rgba(218,121,140,.5), inset 0 2px 6px rgba(255,255,255,.5), inset 0 -10px 16px rgba(0,0,0,.16);"><div style="position:absolute; top:7px; left:7px; width:9px; height:48px; border-radius:8px; background:linear-gradient(rgba(255,255,255,.75), rgba(255,255,255,0)); filter:blur(.5px);"></div></div>
+    </div>
+    <div data-travel-pill data-rot="-22" data-sx="20" data-sy="6" style="position:absolute; top:0; left:0; opacity:0; will-change:transform,opacity;">
+      <div style="position:relative; width:40px; height:100px; border-radius:20px; background:linear-gradient(170deg,#9D8BF7,#6E4FD0); box-shadow:0 16px 34px -10px rgba(157,78,221,.45), inset 0 2px 6px rgba(255,255,255,.55), inset 0 -10px 16px rgba(0,0,0,.16);"><div style="position:absolute; top:7px; left:7px; width:9px; height:52px; border-radius:8px; background:linear-gradient(rgba(255,255,255,.78), rgba(255,255,255,0)); filter:blur(.5px);"></div></div>
+    </div>
+  </div>
+
+  <!-- ============ CONTENT ============ -->
+  <div style="position:relative; z-index:2;">
+
+    <!-- ===== NAV ===== -->
+    <nav id="dnav" style="position:fixed; top:0; left:0; right:0; z-index:50; display:flex; align-items:center; justify-content:space-between; gap:24px; padding:16px clamp(20px,5vw,56px); border-bottom:1px solid rgba(28,19,48,0); transition:background .4s ease, border-color .4s ease, box-shadow .4s ease, backdrop-filter .4s ease;">
+      <a href="#top" style="display:flex; align-items:center; gap:11px; text-decoration:none;">
+        <img src="assets/logo-drop.png" alt="" style="width:30px; height:auto; display:block;">
+        <span style="font-family:'PP Neue Montreal',sans-serif; font-weight:500; font-size:25px; letter-spacing:-.02em; color:#1C1330;">dreep</span>
+      </a>
+      <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
+        <a href="#signals" style="padding:9px 15px; border-radius:9999px; text-decoration:none; color:#5B6477; font-size:14.5px; font-weight:500; transition:color .2s, background .2s;" style-hover="color:#1C1330; background:rgba(28,19,48,.05);">Signals</a>
+        <a href="#how" style="padding:9px 15px; border-radius:9999px; text-decoration:none; color:#5B6477; font-size:14.5px; font-weight:500; transition:color .2s, background .2s;" style-hover="color:#1C1330; background:rgba(28,19,48,.05);">How it works</a>
+        <a href="#device" style="padding:9px 15px; border-radius:9999px; text-decoration:none; color:#5B6477; font-size:14.5px; font-weight:500; transition:color .2s, background .2s;" style-hover="color:#1C1330; background:rgba(28,19,48,.05);">The Dispenser</a>
+        <a href="#formula" style="padding:9px 15px; border-radius:9999px; text-decoration:none; color:#5B6477; font-size:14.5px; font-weight:500; transition:color .2s, background .2s;" style-hover="color:#1C1330; background:rgba(28,19,48,.05);">Formula</a>
+      </div>
+      <a href="#cta" data-magnetic="1" style="display:inline-flex; align-items:center; gap:8px; padding:11px 22px; border-radius:9999px; text-decoration:none; color:#fff; font-size:14.5px; font-weight:600; background:linear-gradient(135deg, #AC57D1, #9D4EDD); border:1px solid rgba(255,255,255,.25); box-shadow:0 10px 26px -10px rgba(172,87,209,.6), inset 0 1px 0 rgba(255,255,255,.4); transition:filter .2s;" style-hover="filter:brightness(1.06);">Get Dreep <span style="font-size:16px; line-height:1;">→</span></a>
+    </nav>
+
+    <!-- ===== HERO ===== -->
+    <header id="top" style="position:relative; max-width:1280px; margin:0 auto; padding:clamp(120px,16vh,180px) clamp(20px,5vw,56px) clamp(60px,8vw,90px); display:flex; flex-wrap:wrap; align-items:center; gap:clamp(32px,5vw,56px);">
+      <div style="flex:1 1 460px; min-width:300px;">
+        <div data-reveal style="display:inline-flex; align-items:center; gap:9px; padding:7px 15px 7px 9px; border-radius:9999px; background:rgba(255,255,255,.72); border:1px solid rgba(28,19,48,.08); backdrop-filter:blur(18px); -webkit-backdrop-filter:blur(18px); box-shadow:0 6px 18px -10px rgba(76,40,130,.25); margin-bottom:28px;">
+          <span style="display:inline-flex; width:22px; height:22px; border-radius:50%; align-items:center; justify-content:center; background:linear-gradient(135deg,#AC57D1,#069494); box-shadow:0 0 12px rgba(172,87,209,.55);">
+            <span style="width:7px; height:7px; border-radius:50%; background:#fff; animation:blink 2s ease-in-out infinite;"></span>
+          </span>
+          <span style="font-size:11.5px; font-weight:700; letter-spacing:1.6px; text-transform:uppercase; color:#6B5B86;">AI-Powered Supplementation</span>
+        </div>
+        <h1 data-reveal data-delay="60" style="margin:0; font-family:'PP Neue Montreal',sans-serif; font-weight:500; font-size:clamp(44px,7vw,84px); line-height:.98; letter-spacing:-.03em; color:#1C1330;">
+          Your body<br>evolves.<br>
+          <span style="background:linear-gradient(100deg,#AD8BF7,#AC57D1 32%,#DA798C 66%,#069494); background-size:220% auto; -webkit-background-clip:text; background-clip:text; color:transparent; animation:gradShift 9s linear infinite;">So should<br>your nutrition.</span>
+        </h1>
+        <p data-reveal data-delay="140" style="margin:30px 0 0; max-width:480px; font-size:clamp(16px,1.5vw,18.5px); line-height:1.6; color:#475569;">
+          Dreep reads your sleep, stress, activity and nutrition — then dispenses a precise daily vitamin shot tuned to exactly what your body needs today. No more static, one-size-fits-all routines.
+        </p>
+        <div data-reveal data-delay="220" style="display:flex; flex-wrap:wrap; gap:14px; margin-top:36px;">
+          <a href="#cta" data-magnetic="1" style="display:inline-flex; align-items:center; gap:10px; padding:17px 30px; border-radius:9999px; text-decoration:none; color:#fff; font-size:16px; font-weight:600; background:linear-gradient(135deg, #AC57D1, #9D4EDD); border:1px solid rgba(255,255,255,.28); box-shadow:0 16px 38px -12px rgba(172,87,209,.6), inset 0 1px 0 rgba(255,255,255,.42); transition:filter .25s;" style-hover="filter:brightness(1.06);">Optimize Your Output <span style="font-size:18px; line-height:1;">→</span></a>
+          <a href="#how" style="display:inline-flex; align-items:center; gap:9px; padding:17px 28px; border-radius:9999px; text-decoration:none; color:#1C1330; font-size:16px; font-weight:500; background:rgba(255,255,255,.72); border:1px solid rgba(28,19,48,.1); backdrop-filter:blur(18px); -webkit-backdrop-filter:blur(18px); box-shadow:0 8px 22px -14px rgba(76,40,130,.3); transition:background .25s, border-color .25s;" style-hover="background:#fff; border-color:rgba(28,19,48,.18);">See how it works</a>
+        </div>
+        <div data-reveal data-delay="300" style="display:flex; flex-wrap:wrap; gap:24px; margin-top:42px;">
+          <div style="display:flex; flex-direction:column; gap:3px;">
+            <span data-count="4" style="font-family:'PP Neue Montreal',sans-serif; font-weight:500; font-size:30px; color:#1C1330;">4</span>
+            <span style="font-size:12.5px; color:#64748B;">Daily signals analyzed</span>
+          </div>
+          <div style="width:1px; align-self:stretch; background:rgba(28,19,48,.12);"></div>
+          <div style="display:flex; flex-direction:column; gap:3px;">
+            <span data-count="1" style="font-family:'PP Neue Montreal',sans-serif; font-weight:500; font-size:30px; color:#1C1330;">1</span>
+            <span style="font-size:12.5px; color:#64748B;">Precise shot per day</span>
+          </div>
+          <div style="width:1px; align-self:stretch; background:rgba(28,19,48,.12);"></div>
+          <div style="display:flex; flex-direction:column; gap:3px;">
+            <span style="font-family:'PP Neue Montreal',sans-serif; font-weight:500; font-size:30px; background:linear-gradient(120deg,#AD8BF7,#069494); -webkit-background-clip:text; background-clip:text; color:transparent;">∞</span>
+            <span style="font-size:12.5px; color:#64748B;">Formulas, re-tuned daily</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- hero visual -->
+      <div style="flex:1 1 440px; min-width:320px; display:flex; justify-content:center;">
+        <div data-hero-visual style="position:relative; width:clamp(330px,40vw,520px); aspect-ratio:1;">
+          <!-- rings -->
+          <div style="position:absolute; top:50%; left:50%; width:100%; height:100%; margin:-50% 0 0 -50%; border-radius:50%; border:1px solid rgba(28,19,48,.06);"></div>
+          <div style="position:absolute; top:50%; left:50%; width:78%; height:78%; margin:-39% 0 0 -39%; border-radius:50%; border:1px dashed rgba(173,139,247,.4); animation:spinSlow 52s linear infinite;"></div>
+          <div style="position:absolute; top:50%; left:50%; width:56%; height:56%; margin:-28% 0 0 -28%; border-radius:50%; border:1px solid rgba(28,19,48,.08); animation:spinRev 40s linear infinite;">
+            <span style="position:absolute; top:-4px; left:calc(50% - 4px); width:8px; height:8px; border-radius:50%; background:#AC57D1; box-shadow:0 0 14px rgba(172,87,209,.8);"></span>
+            <span style="position:absolute; bottom:-4px; left:calc(50% - 4px); width:6px; height:6px; border-radius:50%; background:#069494; box-shadow:0 0 12px rgba(6,148,148,.8);"></span>
+          </div>
+          <!-- pulse ring -->
+          <div style="position:absolute; top:50%; left:50%; width:56%; height:56%; margin:-28% 0 0 -28%; border-radius:50%; border:1px solid rgba(172,87,209,.45); animation:pulseRing 3.6s ease-out infinite;"></div>
+
+          <!-- droplet -->
+          <img src="assets/logo-drop.png" alt="Dreep fingerprint droplet" style="position:absolute; top:50%; left:50%; width:40%; height:auto; margin-left:-20%; margin-top:-24%; animation:floatA 7s ease-in-out infinite, dropGlow 5s ease-in-out infinite;">
+
+          <!-- pill anchors (invisible rest positions for the travelling pills) -->
+          <div data-pill-anchor style="position:absolute; top:16%; left:16%; width:0; height:0;"></div>
+          <div data-pill-anchor style="position:absolute; top:20%; left:84%; width:0; height:0;"></div>
+          <div data-pill-anchor style="position:absolute; top:58%; left:90%; width:0; height:0;"></div>
+          <div data-pill-anchor style="position:absolute; top:86%; left:74%; width:0; height:0;"></div>
+          <div data-pill-anchor style="position:absolute; top:62%; left:8%; width:0; height:0;"></div>
+
+          <!-- floating glass stat chips -->
+          <div style="position:absolute; top:18%; left:-6%; animation:floatB 9s ease-in-out infinite; z-index:3;">
+            <div style="display:flex; align-items:center; gap:9px; padding:9px 14px; border-radius:14px; background:rgba(255,255,255,.82); border:1px solid rgba(28,19,48,.07); backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px); box-shadow:0 18px 38px -20px rgba(76,40,130,.4);">
+              <span style="width:9px; height:9px; border-radius:50%; background:#AD8BF7; box-shadow:0 0 10px #AD8BF7;"></span>
+              <div style="line-height:1.2;"><div style="font-size:10px; letter-spacing:.6px; text-transform:uppercase; color:#94A3B8;">Sleep</div><div style="font-size:14px; font-weight:600; color:#1C1330;">7h 42m</div></div>
+            </div>
+          </div>
+          <div style="position:absolute; bottom:22%; left:-9%; animation:floatA 10s ease-in-out infinite; z-index:3;">
+            <div style="display:flex; align-items:center; gap:9px; padding:9px 14px; border-radius:14px; background:rgba(255,255,255,.82); border:1px solid rgba(28,19,48,.07); backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px); box-shadow:0 18px 38px -20px rgba(76,40,130,.4);">
+              <span style="width:9px; height:9px; border-radius:50%; background:#069494; box-shadow:0 0 10px #069494;"></span>
+              <div style="line-height:1.2;"><div style="font-size:10px; letter-spacing:.6px; text-transform:uppercase; color:#94A3B8;">Recovery</div><div style="font-size:14px; font-weight:600; color:#1C1330;">94%</div></div>
+            </div>
+          </div>
+          <div style="position:absolute; top:52%; right:-7%; animation:floatB 8.4s ease-in-out infinite; z-index:3;">
+            <div style="display:flex; align-items:center; gap:9px; padding:9px 14px; border-radius:14px; background:rgba(255,255,255,.82); border:1px solid rgba(28,19,48,.07); backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px); box-shadow:0 18px 38px -20px rgba(76,40,130,.4);">
+              <span style="width:9px; height:9px; border-radius:50%; background:#DA798C; box-shadow:0 0 10px #DA798C;"></span>
+              <div style="line-height:1.2;"><div style="font-size:10px; letter-spacing:.6px; text-transform:uppercase; color:#94A3B8;">HRV</div><div style="font-size:14px; font-weight:600; color:#1C1330;">68 ms</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- scroll cue -->
+      <div style="position:absolute; bottom:18px; left:50%; transform:translateX(-50%); display:flex; flex-direction:column; align-items:center; gap:8px;">
+        <span style="font-size:10.5px; letter-spacing:2px; text-transform:uppercase; color:rgba(28,19,48,.4);">Scroll</span>
+        <span style="width:22px; height:34px; border-radius:12px; border:1.5px solid rgba(28,19,48,.22); display:flex; justify-content:center; padding-top:7px;"><span style="width:3px; height:7px; border-radius:2px; background:rgba(28,19,48,.5); animation:scrollCue 1.8s ease-in-out infinite;"></span></span>
+      </div>
+    </header>
+
+    <!-- ===== MARQUEE STRIP ===== -->
+    <div style="position:relative; padding:22px 0; border-top:1px solid rgba(28,19,48,.07); border-bottom:1px solid rgba(28,19,48,.07); background:rgba(28,19,48,.015); overflow:hidden;">
+      <div style="display:flex; width:max-content; animation:marquee 28s linear infinite;">
+        <div style="display:flex; align-items:center; gap:44px; padding-right:44px; font-family:'PP Neue Montreal',sans-serif; font-weight:500; font-size:clamp(18px,2vw,24px); color:rgba(28,19,48,.32); white-space:nowrap;">
+          <span>Precise supplementation</span><span style="color:#AC57D1;">✦</span><span>Real-time adaptation</span><span style="color:#069494;">✦</span><span>Personalized, powered by AI</span><span style="color:#DA798C;">✦</span><span>Your body, decoded daily</span><span style="color:#AD8BF7;">✦</span>
+          <span>Precise supplementation</span><span style="color:#AC57D1;">✦</span><span>Real-time adaptation</span><span style="color:#069494;">✦</span><span>Personalized, powered by AI</span><span style="color:#DA798C;">✦</span><span>Your body, decoded daily</span><span style="color:#AD8BF7;">✦</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== SIGNALS ===== -->
+    <section id="signals" style="max-width:1280px; margin:0 auto; padding:clamp(80px,11vw,150px) clamp(20px,5vw,56px) clamp(40px,6vw,80px);">
+      <div data-reveal style="display:flex; align-items:center; gap:12px; margin-bottom:20px;">
+        <span style="width:30px; height:1px; background:linear-gradient(90deg,#AC57D1,transparent);"></span>
+        <span style="font-size:12px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:#9B4FC4;">Daily signals analyzed</span>
+      </div>
+      <h2 data-reveal data-delay="60" style="margin:0; max-width:840px; font-family:'PP Neue Montreal',sans-serif; font-weight:500; font-size:clamp(30px,4.4vw,52px); line-height:1.08; letter-spacing:-.02em; color:#1C1330;">Your body is sending signals.<br><span style="color:rgba(28,19,48,.42);">Dreep reads every one of them.</span></h2>
+      <p data-reveal data-delay="120" style="margin:22px 0 0; max-width:560px; font-size:17px; line-height:1.6; color:#475569;">Sleep, stress, activity and nutrition — continuously interpreted and translated into a single adaptive formula that evolves with you.</p>
+
+      <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:18px; margin-top:48px;">
+        <!-- Sleep -->
+        <div data-reveal data-delay="40" style="position:relative; padding:26px; border-radius:22px; background:rgba(255,255,255,.7); border:1px solid rgba(28,19,48,.07); backdrop-filter:blur(18px); -webkit-backdrop-filter:blur(18px); box-shadow:0 24px 50px -28px rgba(76,40,130,.32); overflow:hidden; transition:transform .3s ease, box-shadow .3s ease, border-color .3s ease;" style-hover="transform:translateY(-4px); border-color:rgba(173,139,247,.5); box-shadow:0 30px 56px -26px rgba(76,40,130,.4);">
+          <div style="width:46px; height:46px; border-radius:13px; display:flex; align-items:center; justify-content:center; background:rgba(173,139,247,.16); border:1px solid rgba(173,139,247,.35); margin-bottom:20px;">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#8A5BD0" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          </div>
+          <div style="font-size:12px; letter-spacing:1.4px; text-transform:uppercase; color:#94A3B8; margin-bottom:6px;">Sleep</div>
+          <div style="font-size:19px; font-weight:600; color:#1C1330; margin-bottom:6px;">Depth & recovery</div>
+          <div style="font-size:14px; line-height:1.5; color:#64748B;">How deeply you rested sets the baseline for today's blend.</div>
+        </div>
+        <!-- Stress -->
+        <div data-reveal data-delay="120" style="position:relative; padding:26px; border-radius:22px; background:rgba(255,255,255,.7); border:1px solid rgba(28,19,48,.07); backdrop-filter:blur(18px); -webkit-backdrop-filter:blur(18px); box-shadow:0 24px 50px -28px rgba(76,40,130,.32); overflow:hidden; transition:transform .3s ease, box-shadow .3s ease, border-color .3s ease;" style-hover="transform:translateY(-4px); border-color:rgba(218,121,140,.5); box-shadow:0 30px 56px -26px rgba(76,40,130,.4);">
+          <div style="width:46px; height:46px; border-radius:13px; display:flex; align-items:center; justify-content:center; background:rgba(218,121,140,.16); border:1px solid rgba(218,121,140,.35); margin-bottom:20px;">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#C25E72" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+          </div>
+          <div style="font-size:12px; letter-spacing:1.4px; text-transform:uppercase; color:#94A3B8; margin-bottom:6px;">Stress</div>
+          <div style="font-size:19px; font-weight:600; color:#1C1330; margin-bottom:6px;">Load & balance</div>
+          <div style="font-size:14px; line-height:1.5; color:#64748B;">HRV and strain signal when your system needs support.</div>
+        </div>
+        <!-- Activity -->
+        <div data-reveal data-delay="200" style="position:relative; padding:26px; border-radius:22px; background:rgba(255,255,255,.7); border:1px solid rgba(28,19,48,.07); backdrop-filter:blur(18px); -webkit-backdrop-filter:blur(18px); box-shadow:0 24px 50px -28px rgba(76,40,130,.32); overflow:hidden; transition:transform .3s ease, box-shadow .3s ease, border-color .3s ease;" style-hover="transform:translateY(-4px); border-color:rgba(6,148,148,.5); box-shadow:0 30px 56px -26px rgba(76,40,130,.4);">
+          <div style="width:46px; height:46px; border-radius:13px; display:flex; align-items:center; justify-content:center; background:rgba(6,148,148,.14); border:1px solid rgba(6,148,148,.32); margin-bottom:20px;">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#069494" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+          </div>
+          <div style="font-size:12px; letter-spacing:1.4px; text-transform:uppercase; color:#94A3B8; margin-bottom:6px;">Activity</div>
+          <div style="font-size:19px; font-weight:600; color:#1C1330; margin-bottom:6px;">Output & strain</div>
+          <div style="font-size:14px; line-height:1.5; color:#64748B;">Training load drives what your muscles and mind demand.</div>
+        </div>
+        <!-- Nutrition -->
+        <div data-reveal data-delay="280" style="position:relative; padding:26px; border-radius:22px; background:rgba(255,255,255,.7); border:1px solid rgba(28,19,48,.07); backdrop-filter:blur(18px); -webkit-backdrop-filter:blur(18px); box-shadow:0 24px 50px -28px rgba(76,40,130,.32); overflow:hidden; transition:transform .3s ease, box-shadow .3s ease, border-color .3s ease;" style-hover="transform:translateY(-4px); border-color:rgba(120,170,165,.55); box-shadow:0 30px 56px -26px rgba(76,40,130,.4);">
+          <div style="width:46px; height:46px; border-radius:13px; display:flex; align-items:center; justify-content:center; background:rgba(120,170,165,.16); border:1px solid rgba(120,170,165,.34); margin-bottom:20px;">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#4E938F" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10z"/><path d="M2 21c0-3 1.85-5.36 5.08-6"/></svg>
+          </div>
+          <div style="font-size:12px; letter-spacing:1.4px; text-transform:uppercase; color:#94A3B8; margin-bottom:6px;">Nutrition</div>
+          <div style="font-size:19px; font-weight:600; color:#1C1330; margin-bottom:6px;">Intake & gaps</div>
+          <div style="font-size:14px; line-height:1.5; color:#64748B;">What you ate decides what's still missing from the picture.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== HOW IT WORKS ===== -->
+    <section id="how" style="max-width:1280px; margin:0 auto; padding:clamp(70px,9vw,120px) clamp(20px,5vw,56px);">
+      <div data-reveal style="display:flex; align-items:center; gap:12px; margin-bottom:20px;">
+        <span style="width:30px; height:1px; background:linear-gradient(90deg,#069494,transparent);"></span>
+        <span style="font-size:12px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:#0A8A8A;">How it works</span>
+      </div>
+      <h2 data-reveal data-delay="60" style="margin:0 0 56px; max-width:760px; font-family:'PP Neue Montreal',sans-serif; font-weight:500; font-size:clamp(30px,4.4vw,52px); line-height:1.08; letter-spacing:-.02em; color:#1C1330;">From signal to shot,<br>in three precise steps.</h2>
+
+      <div style="position:relative; display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:20px;">
+        <!-- step 1 -->
+        <div data-reveal data-delay="40" style="position:relative; padding:30px 28px; border-radius:24px; background:rgba(255,255,255,.7); border:1px solid rgba(28,19,48,.07); backdrop-filter:blur(18px); -webkit-backdrop-filter:blur(18px); box-shadow:0 24px 50px -28px rgba(76,40,130,.32);">
+          <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:24px;">
+            <span style="font-family:'PP Neue Montreal',sans-serif; font-size:48px; font-weight:500; line-height:1; background:linear-gradient(135deg,#AD8BF7,#AC57D1); -webkit-background-clip:text; background-clip:text; color:transparent;">01</span>
+            <span style="width:48px; height:48px; border-radius:14px; display:flex; align-items:center; justify-content:center; background:rgba(172,87,209,.14); border:1px solid rgba(172,87,209,.3);">
+              <svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="#8A5BD0" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7V5a2 2 0 0 1 2-2h2"/><path d="M17 3h2a2 2 0 0 1 2 2v2"/><path d="M21 17v2a2 2 0 0 1-2 2h-2"/><path d="M7 21H5a2 2 0 0 1-2-2v-2"/><circle cx="12" cy="12" r="3.2"/></svg>
+            </span>
+          </div>
+          <h3 style="margin:0 0 10px; font-size:21px; font-weight:600; color:#1C1330;">Reads your signals</h3>
+          <p style="margin:0; font-size:15px; line-height:1.6; color:#64748B;">Dreep syncs with your wearables and routine, capturing sleep, stress, activity and nutrition the moment your day begins.</p>
+        </div>
+        <!-- step 2 -->
+        <div data-reveal data-delay="140" style="position:relative; padding:30px 28px; border-radius:24px; background:rgba(255,255,255,.7); border:1px solid rgba(28,19,48,.07); backdrop-filter:blur(18px); -webkit-backdrop-filter:blur(18px); box-shadow:0 24px 50px -28px rgba(76,40,130,.32);">
+          <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:24px;">
+            <span style="font-family:'PP Neue Montreal',sans-serif; font-size:48px; font-weight:500; line-height:1; background:linear-gradient(135deg,#AD8BF7,#069494); -webkit-background-clip:text; background-clip:text; color:transparent;">02</span>
+            <span style="width:48px; height:48px; border-radius:14px; display:flex; align-items:center; justify-content:center; background:rgba(157,78,221,.14); border:1px solid rgba(157,78,221,.3);">
+              <svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="#8A5BD0" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="5" width="14" height="14" rx="2"/><path d="M9 9h6v6H9z"/><path d="M9 2v3M15 2v3M9 19v3M15 19v3M2 9h3M2 15h3M19 9h3M19 15h3"/></svg>
+            </span>
+          </div>
+          <h3 style="margin:0 0 10px; font-size:21px; font-weight:600; color:#1C1330;">AI interpreter adapts</h3>
+          <p style="margin:0; font-size:15px; line-height:1.6; color:#64748B;">Our model translates raw signals into a real-time formula — recalculating exact micronutrient doses for who you are today.</p>
+        </div>
+        <!-- step 3 -->
+        <div data-reveal data-delay="240" style="position:relative; padding:30px 28px; border-radius:24px; background:rgba(255,255,255,.7); border:1px solid rgba(28,19,48,.07); backdrop-filter:blur(18px); -webkit-backdrop-filter:blur(18px); box-shadow:0 24px 50px -28px rgba(76,40,130,.32);">
+          <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:24px;">
+            <span style="font-family:'PP Neue Montreal',sans-serif; font-size:48px; font-weight:500; line-height:1; background:linear-gradient(135deg,#069494,#3FC6C6); -webkit-background-clip:text; background-clip:text; color:transparent;">03</span>
+            <span style="width:48px; height:48px; border-radius:14px; display:flex; align-items:center; justify-content:center; background:rgba(6,148,148,.14); border:1px solid rgba(6,148,148,.32);">
+              <svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="#069494" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
+            </span>
+          </div>
+          <h3 style="margin:0 0 10px; font-size:21px; font-weight:600; color:#1C1330;">Dispenses your shot</h3>
+          <p style="margin:0; font-size:15px; line-height:1.6; color:#64748B;">The dispenser blends modular liquid capsules into one precise vitamin shot — ready exactly when you are.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== DEVICE ===== -->
+    <section id="device" style="max-width:1280px; margin:0 auto; padding:clamp(70px,9vw,120px) clamp(20px,5vw,56px);">
+      <div style="display:flex; flex-wrap:wrap; align-items:center; gap:clamp(36px,5vw,72px);">
+        <div style="flex:1 1 380px; min-width:300px;">
+          <div data-reveal style="display:flex; align-items:center; gap:12px; margin-bottom:20px;">
+            <span style="width:30px; height:1px; background:linear-gradient(90deg,#AC57D1,transparent);"></span>
+            <span style="font-size:12px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:#9B4FC4;">The Dispenser</span>
+          </div>
+          <h2 data-reveal data-delay="60" style="margin:0 0 22px; font-family:'PP Neue Montreal',sans-serif; font-weight:500; font-size:clamp(30px,4.2vw,50px); line-height:1.08; letter-spacing:-.02em; color:#1C1330;">Modular capsules.<br>AI-driven dosing.</h2>
+          <p data-reveal data-delay="120" style="margin:0 0 34px; max-width:480px; font-size:17px; line-height:1.62; color:#475569;">An intelligent device that holds modular liquid capsules and mixes them on demand. Every shot is metered to the milligram — no guesswork, no waste, no static routine.</p>
+          <div data-reveal data-delay="180" style="display:flex; flex-direction:column; gap:6px;">
+            <div style="display:flex; gap:16px; padding:18px 0; border-top:1px solid rgba(28,19,48,.1);">
+              <span style="flex:none; width:34px; height:34px; border-radius:10px; display:flex; align-items:center; justify-content:center; background:rgba(173,139,247,.16); border:1px solid rgba(173,139,247,.32); color:#8A5BD0; font-weight:700; font-size:13px;">01</span>
+              <div><div style="font-size:16px; font-weight:600; color:#1C1330; margin-bottom:3px;">Modular liquid capsules</div><div style="font-size:14px; line-height:1.5; color:#64748B;">Swap and stack micronutrient capsules that the device draws from precisely.</div></div>
+            </div>
+            <div style="display:flex; gap:16px; padding:18px 0; border-top:1px solid rgba(28,19,48,.1);">
+              <span style="flex:none; width:34px; height:34px; border-radius:10px; display:flex; align-items:center; justify-content:center; background:rgba(157,78,221,.16); border:1px solid rgba(157,78,221,.32); color:#8A5BD0; font-weight:700; font-size:13px;">02</span>
+              <div><div style="font-size:16px; font-weight:600; color:#1C1330; margin-bottom:3px;">Real-time AI dosing</div><div style="font-size:14px; line-height:1.5; color:#64748B;">Doses recalculate every morning against your latest signals.</div></div>
+            </div>
+            <div style="display:flex; gap:16px; padding:18px 0; border-top:1px solid rgba(28,19,48,.1); border-bottom:1px solid rgba(28,19,48,.1);">
+              <span style="flex:none; width:34px; height:34px; border-radius:10px; display:flex; align-items:center; justify-content:center; background:rgba(6,148,148,.14); border:1px solid rgba(6,148,148,.3); color:#069494; font-weight:700; font-size:13px;">03</span>
+              <div><div style="font-size:16px; font-weight:600; color:#1C1330; margin-bottom:3px;">One clean shot, automated refills</div><div style="font-size:14px; line-height:1.5; color:#64748B;">Pour one shot a day. Capsules reorder themselves before you run out.</div></div>
+            </div>
+          </div>
+        </div>
+        <!-- device visual -->
+        <div data-reveal data-delay="120" style="flex:1 1 380px; min-width:300px; display:flex; justify-content:center;">
+          <div style="position:relative; width:100%; max-width:440px; aspect-ratio:4/5; border-radius:28px; padding:3px; background:linear-gradient(150deg, rgba(172,87,209,.55), rgba(6,148,148,.45) 60%, rgba(218,121,140,.45)); box-shadow:0 40px 90px -34px rgba(76,40,130,.5);">
+            <div style="position:relative; width:100%; height:100%; border-radius:25px; overflow:hidden; background:rgba(255,255,255,.55);">
+              <img src="assets/dispenser-pink.png" alt="Dreep dispenser pouring a personalized vitamin shot" style="position:absolute; inset:0; width:100%; height:100%; object-fit:contain;">
+              <div style="position:absolute; inset:0; pointer-events:none; background:radial-gradient(120% 60% at 50% 110%, rgba(172,87,209,.22), transparent 60%);"></div>
+              <div style="position:absolute; left:16px; bottom:16px; display:flex; align-items:center; gap:8px; padding:8px 14px; border-radius:9999px; background:rgba(255,255,255,.8); border:1px solid rgba(28,19,48,.08); backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px); pointer-events:none; box-shadow:0 8px 22px -14px rgba(76,40,130,.4);">
+                <span style="width:8px; height:8px; border-radius:50%; background:#069494; box-shadow:0 0 10px #069494; animation:blink 2s ease-in-out infinite;"></span>
+                <span style="font-size:12.5px; font-weight:600; color:#1C1330;">Dispensing today's formula</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== FORMULA VISUALIZATION ===== -->
+    <section id="formula" style="max-width:1280px; margin:0 auto; padding:clamp(70px,9vw,120px) clamp(20px,5vw,56px);">
+      <div style="position:relative; border-radius:32px; overflow:hidden; padding:clamp(34px,5vw,64px); background:linear-gradient(160deg, rgba(255,255,255,.78), rgba(247,243,252,.7)); border:1px solid rgba(28,19,48,.08); backdrop-filter:blur(22px); -webkit-backdrop-filter:blur(22px); box-shadow:0 40px 90px -38px rgba(76,40,130,.4);">
+        <div style="position:absolute; top:-30%; right:-10%; width:50%; height:140%; background:radial-gradient(circle, rgba(6,148,148,.16), transparent 65%); pointer-events:none;"></div>
+        <div style="position:absolute; bottom:-30%; left:-8%; width:45%; height:130%; background:radial-gradient(circle, rgba(172,87,209,.14), transparent 65%); pointer-events:none;"></div>
+        <div style="position:relative; display:flex; flex-wrap:wrap; align-items:center; gap:clamp(36px,5vw,64px);">
+          <!-- left copy + bars -->
+          <div style="flex:1 1 360px; min-width:300px;">
+            <div data-reveal style="display:flex; align-items:center; gap:12px; margin-bottom:20px;">
+              <span style="width:30px; height:1px; background:linear-gradient(90deg,#069494,transparent);"></span>
+              <span style="font-size:12px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:#0A8A8A;">Real-time formula</span>
+            </div>
+            <h2 data-reveal data-delay="60" style="margin:0 0 18px; font-family:'PP Neue Montreal',sans-serif; font-weight:500; font-size:clamp(28px,3.8vw,46px); line-height:1.1; letter-spacing:-.02em; color:#1C1330;">Recalculated for who you are today.</h2>
+            <p data-reveal data-delay="120" style="margin:0 0 30px; max-width:440px; font-size:16px; line-height:1.6; color:#475569;">A glimpse at today's blend — every dose shifts with last night's sleep, this week's training, and what your body is actually short on. Scroll a little further and watch your capsules pour in.</p>
+
+            <div data-reveal data-delay="160" style="display:flex; flex-direction:column; gap:16px; max-width:420px;">
+              <div>
+                <div style="display:flex; justify-content:space-between; margin-bottom:7px; font-size:13.5px;"><span style="color:#1C1330; font-weight:500;">Magnesium</span><span style="color:#94A3B8;">High priority</span></div>
+                <div style="height:7px; border-radius:9999px; background:rgba(28,19,48,.08); overflow:hidden;"><div data-bar="84" style="height:100%; border-radius:9999px; background:linear-gradient(90deg,#AD8BF7,#AC57D1);"></div></div>
+              </div>
+              <div>
+                <div style="display:flex; justify-content:space-between; margin-bottom:7px; font-size:13.5px;"><span style="color:#1C1330; font-weight:500;">Vitamin D₃</span><span style="color:#94A3B8;">Elevated</span></div>
+                <div style="height:7px; border-radius:9999px; background:rgba(28,19,48,.08); overflow:hidden;"><div data-bar="68" style="height:100%; border-radius:9999px; background:linear-gradient(90deg,#AD8BF7,#DA798C);"></div></div>
+              </div>
+              <div>
+                <div style="display:flex; justify-content:space-between; margin-bottom:7px; font-size:13.5px;"><span style="color:#1C1330; font-weight:500;">Omega-3</span><span style="color:#94A3B8;">Maintained</span></div>
+                <div style="height:7px; border-radius:9999px; background:rgba(28,19,48,.08); overflow:hidden;"><div data-bar="72" style="height:100%; border-radius:9999px; background:linear-gradient(90deg,#069494,#3FC6C6);"></div></div>
+              </div>
+              <div>
+                <div style="display:flex; justify-content:space-between; margin-bottom:7px; font-size:13.5px;"><span style="color:#1C1330; font-weight:500;">B-Complex</span><span style="color:#94A3B8;">Adjusted</span></div>
+                <div style="height:7px; border-radius:9999px; background:rgba(28,19,48,.08); overflow:hidden;"><div data-bar="55" style="height:100%; border-radius:9999px; background:linear-gradient(90deg,#069494,#AD8BF7);"></div></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- vial -->
+          <div data-reveal data-delay="100" style="flex:1 1 240px; min-width:240px; display:flex; flex-direction:column; align-items:center; gap:22px;">
+            <div style="position:relative; height:300px; display:flex; align-items:flex-end; justify-content:center;">
+              <!-- drips -->
+              <div style="position:absolute; top:-2px; left:calc(50% - 4px); width:8px; height:11px; border-radius:50% 50% 50% 50%/60% 60% 40% 40%; background:#AD8BF7; box-shadow:0 0 10px rgba(173,139,247,.7); animation:drip 2.4s ease-in infinite;"></div>
+              <div style="position:absolute; top:-2px; left:calc(50% - 14px); width:7px; height:10px; border-radius:50%; background:#069494; box-shadow:0 0 10px rgba(6,148,148,.7); animation:drip 2.4s ease-in infinite .9s;"></div>
+              <div style="position:absolute; top:-2px; left:calc(50% + 8px); width:7px; height:10px; border-radius:50%; background:#DA798C; box-shadow:0 0 10px rgba(218,121,140,.7); animation:drip 2.4s ease-in infinite 1.6s;"></div>
+              <!-- tube -->
+              <div data-vial style="position:relative; width:104px; height:250px; border-radius:18px 18px 52px 52px; border:2px solid rgba(28,19,48,.16); background:rgba(28,19,48,.02); overflow:hidden; box-shadow:inset 0 2px 14px rgba(28,19,48,.05), 0 24px 50px -24px rgba(172,87,209,.4);">
+                <div data-liquid style="position:absolute; bottom:0; left:0; right:0; height:6%; background:linear-gradient(120deg,#AC57D1,#AD8BF7,#069494,#AC57D1); background-size:300% 100%; animation:shimmer 6s linear infinite; transition:height .15s linear;">
+                  <div style="position:absolute; top:0; left:0; right:0; height:8px; background:rgba(255,255,255,.45); filter:blur(2px);"></div>
+                </div>
+                <div style="position:absolute; top:8px; left:14px; width:12px; height:130px; border-radius:9px; background:linear-gradient(rgba(255,255,255,.5), rgba(255,255,255,0)); filter:blur(1px);"></div>
+                <div style="position:absolute; inset:0; background:linear-gradient(100deg, transparent 30%, rgba(255,255,255,.3) 50%, transparent 70%); transform:translateX(-120%); animation:sweep 5s ease-in-out infinite 1s;"></div>
+              </div>
+            </div>
+            <div style="text-align:center;">
+              <div style="font-family:'PP Neue Montreal',sans-serif; font-size:15px; color:#1C1330; margin-bottom:4px;">Today's shot</div>
+              <div style="display:inline-flex; align-items:center; gap:7px; padding:6px 13px; border-radius:9999px; background:rgba(6,148,148,.12); border:1px solid rgba(6,148,148,.3);">
+                <span style="width:7px; height:7px; border-radius:50%; background:#069494; box-shadow:0 0 8px #069494;"></span>
+                <span style="font-size:12.5px; font-weight:600; color:#0A8A8A;">Optimized & ready</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== MANIFESTO ===== -->
+    <section style="position:relative; max-width:1100px; margin:0 auto; padding:clamp(80px,11vw,150px) clamp(20px,5vw,56px); text-align:center;">
+      <div data-reveal style="margin:0 auto; display:inline-block;">
+        <p style="margin:0 0 10px; font-size:12px; font-weight:700; letter-spacing:2.5px; text-transform:uppercase; color:#9B4FC4;">Why Dreep</p>
+        <h2 style="margin:0; font-family:'PP Neue Montreal',sans-serif; font-weight:500; font-size:clamp(34px,6vw,76px); line-height:1.02; letter-spacing:-.03em; color:#1C1330;">Fixed formulas<br>are a <span style="background:linear-gradient(100deg,#AD8BF7,#DA798C,#069494); background-size:200% auto; -webkit-background-clip:text; background-clip:text; color:transparent; animation:gradShift 8s linear infinite;">liability.</span></h2>
+        <p style="margin:34px auto 0; max-width:620px; font-size:clamp(17px,2vw,21px); line-height:1.6; color:#475569;">Stop outsourcing your health to static, one-size-fits-all routines. Your body changes every single day — now your supplementation does too.</p>
+      </div>
+    </section>
+
+    <!-- ===== CTA ===== -->
+    <section id="cta" style="max-width:1280px; margin:0 auto; padding:0 clamp(20px,5vw,56px) clamp(80px,10vw,130px);">
+      <div data-reveal style="position:relative; overflow:hidden; border-radius:32px; padding:clamp(44px,7vw,84px) clamp(28px,5vw,64px); text-align:center; background:linear-gradient(150deg, rgba(173,139,247,.24), rgba(255,255,255,.78) 52%, rgba(6,148,148,.18)); border:1px solid rgba(28,19,48,.08); backdrop-filter:blur(22px); -webkit-backdrop-filter:blur(22px); box-shadow:0 50px 100px -44px rgba(76,40,130,.45);">
+        <div style="position:absolute; top:-40%; left:50%; transform:translateX(-50%); width:70%; height:120%; background:radial-gradient(circle, rgba(172,87,209,.2), transparent 62%); pointer-events:none;"></div>
+        <div style="position:relative;">
+          <img src="assets/logo-drop.png" alt="" style="width:54px; height:auto; margin:0 auto 24px; display:block; animation:floatA 6s ease-in-out infinite, dropGlow 5s ease-in-out infinite;">
+          <h2 style="margin:0 auto; max-width:680px; font-family:'PP Neue Montreal',sans-serif; font-weight:500; font-size:clamp(30px,4.6vw,56px); line-height:1.06; letter-spacing:-.02em; color:#1C1330;">Optimize your output.<br>Starting today.</h2>
+          <p style="margin:22px auto 0; max-width:480px; font-size:17px; line-height:1.6; color:#475569;">Precise, personalized supplementation that evolves with you. Join the waitlist and be first to feel the difference.</p>
+          <form data-waitlist style="margin:38px auto 0; display:flex; flex-wrap:wrap; gap:12px; justify-content:center; max-width:520px;">
+            <input data-wl-email type="email" placeholder="you@email.com" style="flex:1 1 260px; min-width:0; padding:16px 22px; border-radius:9999px; border:1px solid rgba(28,19,48,.14); background:rgba(255,255,255,.85); color:#1C1330; font-size:15.5px; font-family:'Inter',sans-serif; outline:none; transition:border-color .2s, box-shadow .2s;" style-focus="border-color:rgba(157,78,221,.8); box-shadow:0 0 0 4px rgba(157,78,221,.16);">
+            <button type="submit" data-magnetic="1" style="flex:none; display:inline-flex; align-items:center; gap:9px; padding:16px 30px; border-radius:9999px; cursor:pointer; color:#fff; font-size:16px; font-weight:600; font-family:'Inter',sans-serif; background:linear-gradient(135deg, #AC57D1, #9D4EDD); border:1px solid rgba(255,255,255,.28); box-shadow:0 16px 38px -12px rgba(172,87,209,.6), inset 0 1px 0 rgba(255,255,255,.42); transition:filter .2s;" style-hover="filter:brightness(1.06);">Optimize Your Output <span style="font-size:18px; line-height:1;">→</span></button>
+          </form>
+          <div data-wl-msg style="height:18px; margin-top:14px; font-size:13.5px; color:#0A8A8A; opacity:0; transition:opacity .3s;">You're on the list — we'll be in touch.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== FOOTER ===== -->
+    <footer style="border-top:1px solid rgba(28,19,48,.08); padding:clamp(48px,6vw,72px) clamp(20px,5vw,56px) 44px;">
+      <div style="max-width:1280px; margin:0 auto; display:flex; flex-wrap:wrap; gap:40px; justify-content:space-between; align-items:flex-start;">
+        <div style="max-width:300px;">
+          <div style="display:flex; align-items:center; gap:11px; margin-bottom:18px;">
+            <img src="assets/logo-drop.png" alt="" style="width:28px; height:auto; display:block;">
+            <span style="font-family:'PP Neue Montreal',sans-serif; font-weight:500; font-size:23px; letter-spacing:-.02em; color:#1C1330;">dreep</span>
+          </div>
+          <p style="margin:0; font-size:14px; line-height:1.6; color:#64748B;">Personalized supplementation, powered by AI. Your body evolves — so should your nutrition.</p>
+        </div>
+        <div style="display:flex; flex-wrap:wrap; gap:clamp(40px,6vw,80px);">
+          <div style="display:flex; flex-direction:column; gap:13px;">
+            <span style="font-size:11.5px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; color:#94A3B8;">Product</span>
+            <a href="#signals" style="font-size:14.5px; color:#475569; text-decoration:none; transition:color .2s;" style-hover="color:#1C1330;">Daily Signals</a>
+            <a href="#how" style="font-size:14.5px; color:#475569; text-decoration:none; transition:color .2s;" style-hover="color:#1C1330;">How it works</a>
+            <a href="#device" style="font-size:14.5px; color:#475569; text-decoration:none; transition:color .2s;" style-hover="color:#1C1330;">The Dispenser</a>
+            <a href="#formula" style="font-size:14.5px; color:#475569; text-decoration:none; transition:color .2s;" style-hover="color:#1C1330;">Formula</a>
+          </div>
+          <div style="display:flex; flex-direction:column; gap:13px;">
+            <span style="font-size:11.5px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; color:#94A3B8;">Company</span>
+            <a href="#cta" style="font-size:14.5px; color:#475569; text-decoration:none; transition:color .2s;" style-hover="color:#1C1330;">Waitlist</a>
+            <a href="#top" style="font-size:14.5px; color:#475569; text-decoration:none; transition:color .2s;" style-hover="color:#1C1330;">About</a>
+            <a href="#top" style="font-size:14.5px; color:#475569; text-decoration:none; transition:color .2s;" style-hover="color:#1C1330;">Science</a>
+            <a href="#top" style="font-size:14.5px; color:#475569; text-decoration:none; transition:color .2s;" style-hover="color:#1C1330;">Contact</a>
+          </div>
+        </div>
+      </div>
+      <div style="max-width:1280px; margin:40px auto 0; padding-top:26px; border-top:1px solid rgba(28,19,48,.07); display:flex; flex-wrap:wrap; gap:14px; justify-content:space-between; align-items:center;">
+        <span style="font-size:13px; color:#94A3B8;">© 2026 Dreep. All rights reserved.</span>
+        <span style="font-size:13px; color:#94A3B8;">dreep.ai</span>
+      </div>
+    </footer>
+
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  rootRef = React.createRef();
+
+  componentDidMount() {
+    const root = this.rootRef.current;
+    if (!root) return;
+    this._cleanup = [];
+    const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    // ---- Scroll reveal (Web Animations API holds its final state; no inline-style revert) ----
+    const reveals = Array.from(root.querySelectorAll('[data-reveal]'));
+    const playReveal = (el) => {
+      if (el.__revealed) return; el.__revealed = true;
+      if (reduce) return;
+      const d = parseFloat(el.getAttribute('data-delay') || '0');
+      el.animate(
+        [{ opacity: 0, transform: 'translateY(42px)' }, { opacity: 1, transform: 'none' }],
+        { duration: 820, delay: d, easing: 'cubic-bezier(.2,.7,.2,1)', fill: 'both' }
+      );
+    };
+    const rio = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) { playReveal(e.target); rio.unobserve(e.target); } });
+    }, { threshold: 0.12, rootMargin: '0px 0px -7% 0px' });
+    reveals.forEach(el => rio.observe(el));
+    this._cleanup.push(() => rio.disconnect());
+    const revealSafety = setTimeout(() => reveals.forEach(playReveal), 1700);
+    this._cleanup.push(() => clearTimeout(revealSafety));
+
+    // ---- Animated counters ----
+    const counters = root.querySelectorAll('[data-count]');
+    const cio = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          const el = e.target;
+          const target = parseFloat(el.getAttribute('data-count'));
+          const dur = 1300, start = performance.now();
+          const tick = (now) => {
+            let p = Math.min(1, (now - start) / dur);
+            p = 1 - Math.pow(1 - p, 3);
+            el.textContent = Math.round(target * p).toString();
+            if (p < 1) requestAnimationFrame(tick);
+          };
+          requestAnimationFrame(tick);
+          cio.unobserve(el);
+        }
+      });
+    }, { threshold: 0.6 });
+    counters.forEach(c => cio.observe(c));
+    this._cleanup.push(() => cio.disconnect());
+
+    // ---- Animated bars ----
+    const bars = root.querySelectorAll('[data-bar]');
+    bars.forEach(b => { b.style.width = '0%'; b.style.transition = 'width 1.3s cubic-bezier(.2,.7,.2,1)'; });
+    const bio = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.style.width = e.target.getAttribute('data-bar') + '%'; bio.unobserve(e.target); } });
+    }, { threshold: 0.4 });
+    bars.forEach(b => bio.observe(b));
+    this._cleanup.push(() => bio.disconnect());
+    const barFallback = setTimeout(() => { bars.forEach(b => { if (getComputedStyle(b).width === '0px') b.style.width = b.getAttribute('data-bar') + '%'; }); }, 1600);
+    this._cleanup.push(() => clearTimeout(barFallback));
+
+    // ---- Nav scroll state (light) ----
+    const nav = root.querySelector('#dnav');
+    const onNav = () => {
+      const s = window.scrollY > 24;
+      if (nav) {
+        nav.style.background = s ? 'rgba(255,255,255,.78)' : 'rgba(255,255,255,0)';
+        nav.style.borderColor = s ? 'rgba(28,19,48,.07)' : 'rgba(28,19,48,0)';
+        nav.style.backdropFilter = s ? 'blur(22px)' : 'none';
+        nav.style.webkitBackdropFilter = s ? 'blur(22px)' : 'none';
+        nav.style.boxShadow = s ? '0 14px 40px -28px rgba(76,40,130,.5)' : 'none';
+      }
+    };
+    window.addEventListener('scroll', onNav, { passive: true });
+    onNav();
+    this._cleanup.push(() => window.removeEventListener('scroll', onNav));
+
+    // ---- Magnetic buttons ----
+    root.querySelectorAll('[data-magnetic]').forEach(btn => {
+      btn.style.transition = 'transform .3s cubic-bezier(.2,.7,.2,1), filter .2s';
+      const move = (e) => {
+        const r = btn.getBoundingClientRect();
+        const mx = e.clientX - r.left - r.width / 2;
+        const my = e.clientY - r.top - r.height / 2;
+        btn.style.transform = 'translate(' + (mx * 0.2) + 'px,' + (my * 0.32) + 'px)';
+      };
+      const leave = () => { btn.style.transform = 'translate(0,0)'; };
+      btn.addEventListener('mousemove', move);
+      btn.addEventListener('mouseleave', leave);
+    });
+
+    // ---- Cursor glow (soft, light) ----
+    if (window.matchMedia && window.matchMedia('(pointer:fine)').matches && !reduce) {
+      const glow = document.createElement('div');
+      glow.style.cssText = 'position:fixed;top:0;left:0;width:480px;height:480px;border-radius:50%;pointer-events:none;z-index:1;transform:translate(-50%,-50%);background:radial-gradient(circle, rgba(172,87,209,.12), rgba(6,148,148,.05) 44%, transparent 68%);mix-blend-mode:multiply;will-change:left,top;';
+      root.appendChild(glow);
+      let tx = window.innerWidth / 2, ty = window.innerHeight / 2, cx = tx, cy = ty, raf;
+      const onMove = (e) => { tx = e.clientX; ty = e.clientY; };
+      window.addEventListener('mousemove', onMove, { passive: true });
+      const loop = () => { cx += (tx - cx) * 0.12; cy += (ty - cy) * 0.12; glow.style.left = cx + 'px'; glow.style.top = cy + 'px'; raf = requestAnimationFrame(loop); };
+      loop();
+      this._cleanup.push(() => { window.removeEventListener('mousemove', onMove); cancelAnimationFrame(raf); glow.remove(); });
+    }
+
+    // ---- Scroll-driven travelling pills -> pour into vial liquid ----
+    const layer = root.querySelector('[data-travel-layer]');
+    const pills = Array.from(root.querySelectorAll('[data-travel-pill]'));
+    const anchors = Array.from(root.querySelectorAll('[data-pill-anchor]'));
+    const vial = root.querySelector('[data-vial]');
+    const liquid = root.querySelector('[data-liquid]');
+
+    if (layer && pills.length && anchors.length && vial && liquid) {
+      const N = pills.length;
+      const maxOff = (N - 1) * 0.05;
+      const easeInOut = (t) => t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+      const scrollPos = () => window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
+
+      // Scroll-driven (no perpetual rAF — survives background-tab throttling and is efficient)
+      const position = () => {
+        const sY = scrollPos();
+        const vr = vial.getBoundingClientRect();
+        const endScroll = Math.max(1, vr.top + sY + vr.height / 2 - window.innerHeight * 0.34);
+        const p = Math.min(1, Math.max(0, sY / endScroll));
+        const cx = vr.left + vr.width / 2;
+        const topY = vr.top + vr.height * 0.16;       // where pills "enter" the tube
+        for (let i = 0; i < N; i++) {
+          const pill = pills[i];
+          const a = anchors[i % anchors.length].getBoundingClientRect();
+          const ax = a.left, ay = a.top;
+          const pp = Math.min(1, Math.max(0, (p - i * 0.05) / (1 - maxOff)));
+          const e = easeInOut(pp);
+          const sx = parseFloat(pill.dataset.sx || '0');
+          const sy = parseFloat(pill.dataset.sy || '0');
+          const x = ax + (cx + sx - ax) * e;
+          const y = ay + (topY + sy - ay) * e;
+          const rot = parseFloat(pill.dataset.rot || '0') * (1 - e);
+          const scale = 1 - 0.52 * e;
+          let op = 1;
+          if (pp > 0.8) op = Math.max(0, (1 - pp) / 0.2);   // sink into the liquid
+          pill.style.transform = 'translate(' + x + 'px,' + y + 'px) translate(-50%,-50%) rotate(' + rot + 'deg) scale(' + scale + ')';
+          pill.style.opacity = op.toFixed(3);
+        }
+        liquid.style.height = (6 + Math.pow(p, 1.25) * 66).toFixed(2) + '%';
+      };
+
+      window.addEventListener('scroll', position, { passive: true });
+      window.addEventListener('resize', position);
+      this._cleanup.push(() => window.removeEventListener('scroll', position));
+      this._cleanup.push(() => window.removeEventListener('resize', position));
+      // initial placement (several passes to settle after fonts/layout)
+      position();
+      [60, 250, 600, 1200].forEach(t => { const id = setTimeout(position, t); this._cleanup.push(() => clearTimeout(id)); });
+    }
+
+    // ---- Waitlist form ----
+    const form = root.querySelector('[data-waitlist]');
+    if (form) {
+      const onSubmit = (e) => {
+        e.preventDefault();
+        const email = root.querySelector('[data-wl-email]');
+        const msg = root.querySelector('[data-wl-msg]');
+        if (email && email.value && email.value.includes('@')) {
+          if (msg) msg.style.opacity = '1';
+          email.value = '';
+          email.blur();
+        } else if (email) {
+          email.style.borderColor = 'rgba(218,121,140,.85)';
+          email.focus();
+        }
+      };
+      form.addEventListener('submit', onSubmit);
+      this._cleanup.push(() => form.removeEventListener('submit', onSubmit));
+    }
+  }
+
+  componentWillUnmount() {
+    (this._cleanup || []).forEach(fn => { try { fn(); } catch (e) {} });
+  }
+
+  renderVals() {
+    return { rootRef: this.rootRef };
+  }
+}
+</script>
+</body>
+</html>
