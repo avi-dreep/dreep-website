@@ -34,6 +34,41 @@ body{margin:0;background:#FBFAFE;-webkit-font-smoothing:antialiased}
 @keyframes scrollCue{0%{transform:translateY(0);opacity:0}35%{opacity:1}70%{opacity:1}100%{transform:translateY(13px);opacity:0}}
 @keyframes sweep{0%{transform:translateX(-120%)}100%{transform:translateX(120%)}}
 @media(prefers-reduced-motion:reduce){*{animation-duration:.001ms!important;animation-iteration-count:1!important}}
+
+/* ── MOBILE RESPONSIVE ───────────────────────────────────── */
+@media(max-width:767px){
+  /* Nav: hide middle links — keep logo + CTA only */
+  #dnav > div{display:none!important}
+  #dnav{gap:0!important}
+
+  /* Hero visual: shrink to fit screen so stat chips stay in bounds */
+  [data-hero-visual]{width:calc(100vw - 88px)!important;min-width:0!important;max-width:290px!important}
+
+  /* Hero stat chips stay proportional — rely on % positioning
+     which scales with the smaller [data-hero-visual] box */
+
+  /* Travelling pills: reduce size on narrow screens */
+  [data-travel-pill] > div{transform:scale(.75);transform-origin:top center}
+
+  /* CTA form: stack input + button vertically */
+  [data-waitlist]{flex-direction:column!important;align-items:stretch!important}
+  [data-waitlist] input,[data-waitlist] button{width:100%!important;flex:none!important;text-align:center!important;justify-content:center!important}
+
+  /* Footer links group: single column */
+  footer > div > div:last-child{gap:32px!important}
+}
+
+/* ── SMALL PHONES (≤ 400px) ─────────────────────────────── */
+@media(max-width:400px){
+  [data-hero-visual]{width:calc(100vw - 64px)!important;max-width:260px!important}
+  /* Hero stat chips: scale down further */
+  [data-hero-visual] > div[style*="floatB"]:first-of-type,
+  [data-hero-visual] > div[style*="floatA"],
+  [data-hero-visual] > div[style*="floatB"]:last-of-type{
+    font-size:11px;
+    padding:7px 11px!important;
+  }
+}
 </style>
 </head>
 <body>
